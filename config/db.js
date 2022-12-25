@@ -1,6 +1,6 @@
 const {Sequelize} = require('sequelize');
 
-const createDB = new Sequelize('TEST-DB', 'user', 'pass', {
+const createDB = new Sequelize('TEST', 'user', 'pass', {
     dialect: 'sqlite',
     host: './config/db.sqlite',
 });

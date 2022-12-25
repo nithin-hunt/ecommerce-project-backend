@@ -1,4 +1,4 @@
-const {sequelize, Sequelize} = require('sequelize');
+const {Sequelize} = require('sequelize');
 
 const createDB = new Sequelize('TEST-DB', 'user', 'pass', {
     dialect: 'sqlite',
@@ -14,10 +14,11 @@ const connectDB = () => {
     })
 };
 
-const userModel = require('../models/userModel');
-const orderModel = require('../models/orderModels');
-
-orderModel.belongsTo(userModel, {foreignKey: "buyerId"});
-userModel.hasMany(orderModel, {foreignKey: "id"});
-
 module.exports = { createDB, connectDB};
+
+const userModel = require('../models/userModel');
+const orderModel = require('../models/orderModel');
+
+orderModel.belongsTo(userModel, { foreignKey: "buyerID" });
+userModel.hasMany(orderModel, { foreignKey: "id" });
+

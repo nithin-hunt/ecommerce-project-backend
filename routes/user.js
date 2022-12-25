@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/userModel');
+const Order = require("../models/orderModel");
+const {isAuthenticated, isBuyer} = require('../middlewares/auth');
 const bcrypt =require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -72,7 +74,7 @@ router.post("/signin", async(req,res) => {
             expiresIn: 360000,
         });
 
-        res.cookie('t', bearerToken, {expire: new Date() + 999});
+        res.cookie('t', bearerToken, {expire: new Date() + 9999});
 
         return res.status(200).json({bearerToken});
     } catch (e) {
@@ -90,4 +92,17 @@ router.get("/signout", (req,res) => {
     }
 })
 
+router.get("/orders", isAuthenticated, isBuyer, async (req, res) => {
+    try {
+      // Get all orders of the user
+      const orders = await Order.findAll({
+        where: { buyerID: req.user.id },
+        include: [{ model: User, attributes: ["name"] }],
+      });
+      return res.status(200).json({ orders });
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json({ err: err.message });
+    }
+  });
 module.exports = router;

@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
 
 const isAuthenticated = async (req,res, next) => {
     try {
@@ -20,18 +21,18 @@ const isAuthenticated = async (req,res, next) => {
         }
 
         req.user = user;
-        next();
+        next()
 
     } catch (e) {
         return res.status(500).send(e);
     }
 }
 
-const isSeller = async (req,res,next) => {
+const isSeller = (req,res,next) => {
     if(req.user.dataValues.isSeller) {
         next();
     } else {
-        return res.status(401).json({err: "You are not seller"})
+        return res.status(401).json({err: "You are not a seller"})
     }
 }
 

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const {isAuthenticated, isSeller} = require('../middlewares/auth');
+const {isAuthenticated, isSeller, isBuyer} = require('../middlewares/auth');
 const upload = require('../utils/fileUpload');
+const Product = require("../models/productModel");
 
 router.post("/create", isAuthenticated, isSeller, (req,res) => {
     upload(req,res, async(err) => {
@@ -24,10 +25,37 @@ router.post("/create", isAuthenticated, isSeller, (req,res) => {
             content: req.file.path
         }
 
+        const savedProduct = await Product.create(productDetails);
+
         return res.status(200).json({
             status: "ok",
-            productDetails
+            productDetails: savedProduct
         })
     })
+});
+
+router.get('get/all', isAuthenticated, async(req,res) => {
+    try {
+        const products = await Product.findAll();
+        return res.status(200).json({products});
+    } catch (e) {
+        res.status(500).json({err: e});
+    }
+})
+
+router.post('/buy/:productId', isAuthenticated, isBuyer, async(req,res) => {
+    try {
+        const product = await Product.findOne({where: {id: req.params.productId}}).dataValues;
+        if(!product) {
+            return res.status(404).json({err: "No product found"});
+        }
+
+        const orderDetails = {
+            productId,
+            buyerId: req.user.id
+        }
+    } catch (e) {
+        res.status(500).json({err: e});
+    }
 })
 module.exports = router;

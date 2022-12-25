@@ -9,7 +9,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 const { WebhookClient } = require('discord.js');
 const webhook = new WebhookClient({
-    url: "https://discord.com/api/webhooks/1056541204550004767/qxgs33qodI5fPYAXokJCJXZV-QyzcfAX10neAvvI-v-ofnMC_YTAKPydCS_G7ZUKhPBX"
+    url: process.env.DISCORD_URL
 });
 
 router.post("/create", isAuthenticated, isSeller, (req,res) => {

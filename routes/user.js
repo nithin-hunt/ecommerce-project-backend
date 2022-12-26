@@ -76,7 +76,7 @@ router.post("/signin", async(req,res) => {
 
         res.cookie('t', bearerToken, {expire: new Date() + 9999});
 
-        return res.status(200).json({bearerToken});
+        return res.status(200).json({ message: "Signed In Successfully!", bearerToken: bearerToken });
     } catch (e) {
         return res.status(500).send(e);
         
@@ -86,7 +86,7 @@ router.post("/signin", async(req,res) => {
 router.get("/signout", (req,res) => {
     try {
         res.clearCookie('t');
-        return res.status(200).json({message: "cookie deleted"});
+        return res.status(200).json({ message: "Signed out successfully" });
     } catch (e) {
         res.status(500).send(e);
     }

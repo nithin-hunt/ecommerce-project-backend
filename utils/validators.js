@@ -9,7 +9,7 @@ const validateName = (name) => {
   }
   
   const validatePassword = (password) => {
-    const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/);
+    const passwordRegex = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
     return passwordRegex.test(password); 
   }
   

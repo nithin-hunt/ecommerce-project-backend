@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
+// middleware to check if the user is authenticated to sell/buy
 const isAuthenticated = async (req,res, next) => {
     try {
         const authHeader = req.headers.authorization;
@@ -8,7 +9,7 @@ const isAuthenticated = async (req,res, next) => {
             return res.status(401).json({err: "authorization header not found"})
         }
 
-        const token = authHeader.split(" ")[1];
+        const token = authHeader.split(" ")[1];  // This is the bearer token
         if(!token) {
             return res.status(401).json({err: "token not found"});
         }
@@ -28,6 +29,7 @@ const isAuthenticated = async (req,res, next) => {
     }
 }
 
+// middleware to check if the user is a seller
 const isSeller = (req,res,next) => {
     if(req.user.isSeller) {
         next();
@@ -36,6 +38,7 @@ const isSeller = (req,res,next) => {
     }
 }
 
+// middleware to check if the user is a buyer
 const isBuyer = (req,res,next) => {
     if(!req.user.isSeller) {
         next();
